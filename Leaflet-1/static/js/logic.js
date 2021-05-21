@@ -4,6 +4,8 @@ var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_mo
 // Perform a GET request to the query URL
 d3.json(queryUrl).then(function (data) {
   // Once we get a response, send the data.features object to the createFeatures function
+  console.log(`feature:${data}`)
+  console.log(`feature:${data.features[0].properties.mag}`)
   createFeatures(data.features);
 });
 var earthquakes = []
@@ -12,34 +14,36 @@ function createFeatures(earthquakeData) {
   // Define a function we want to run once for each feature in the features array
   // Give each feature a popup describing the place and time of the earthquake
   // var markers = []
-  earthquakes.forEach(earthquake => {
+  earthquakeData.forEach(earthquake => {
     var color = "";
-    if ([geometry.coordinates[2]] > 90) {
+    
+    console.log(`coordinates ${earthquake}`)
+    if (earthquake.geometry.coordinates[2] > 90) {
       color = "red";
     }
-    else if ([geometry.coordinates[2]] > 70) {
+    else if (earthquake.geometry.coordinates[2] > 70) {
       color = "orange";
     }
-    else if ([geometry.coordinates[2]] > 50) {
+    else if (earthquake.geometry.coordinates[2] > 50) {
       color = "yellow";
     }
-    else if ([geometry.coordinates[2]] > 30) {
+    else if (earthquake.geometry.coordinates[2] > 30) {
       color = "lime";
     }
     else {
       color = "green";
     }
 
+    console.log(`color: ${color}`)
 
-
-    L.circle(geometry.coordinates, {
+    L.circle(earthquake.geometry.coordinates, {
       fillOpacity: 0.75,
       color: "white",
       fillColor: color,
       // Adjust radius
-      radius: ([properties.mag]) * 1200
-    }).bindPopup("<h3>" + feature.properties.place +
-      "</h3><hr><p>" + new Date(feature.properties.time) + "</p>");
+      radius: (earthquake.properties.mag) * 1200
+    }).bindPopup("<h3>" + earthquake.properties.place +
+      "</h3><hr><p>" + (earthquake.properties.mag) + "</p>");
 
     
 
@@ -63,18 +67,6 @@ function createFeatures(earthquakeData) {
         accessToken: API_KEY
       });
 
-      var darkmap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
-        attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
-        maxZoom: 18,
-        id: "dark-v10",
-        accessToken: API_KEY
-      });
-
-      var baseMaps = {
-        "Street Map": streetmap,
-        "Dark Map": darkmap
-      };
-
       var overlayMaps = {
         Earthquakes: earthquakes
       };
@@ -84,7 +76,7 @@ function createFeatures(earthquakeData) {
           37.09, -95.71
         ],
         zoom: 5,
-        layers: [streetmap, darkmap, earthquakes]
+        layers: [streetmap, earthquakes]
       });
 
       L.control.layers(baseMaps, overlayMaps, {
