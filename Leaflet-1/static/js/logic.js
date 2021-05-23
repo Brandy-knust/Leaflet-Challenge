@@ -81,10 +81,12 @@ function pointToLayer (earthquake, coords) {
       accessToken: API_KEY
     });
 
-    var satellite = L.tileLayer("https://api.mapbox.com/styles/v1/brandy1175/ckoydzai1111s17o0mex7bf6x.html?fresh=true&title=view&access_token={accessToken}", {
-      attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
+    var satellite = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
+      attribution: "© <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>",
       maxZoom: 18,
-      id: "satellite-streets-v11",
+      tileSize: 512,
+      zoomOffset: -1,
+      id: "mapbox/satellite-v9",
       accessToken: API_KEY
     });
 
@@ -108,4 +110,13 @@ function pointToLayer (earthquake, coords) {
     L.control.layers(baseMaps, overlayMaps, {
       collapsed: false
     }).addTo(myMap);
+
+    var info = L.control({
+      position: "bottomright"
+    });
+    info.onAdd = function() {      
+      var div = L.DomUtil.create("div", "legend");
+      return div;
+    };
+    info.addTo(myMap);
   }
