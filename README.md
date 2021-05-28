@@ -1,6 +1,6 @@
 # Leaflet-Challenge
 ## Creating a map to show Earthquakes around the World
-![Earthquakes.png]("Earthquakes.png")
+![Earthquakes.png](Earthquakes.png)
 
 ### About this project
 * This task utilized earthquake data available from the USGS in JSON format. After analyzing data, a map was created in Leaflet by creating a plot of all earthquake locations in the dataset, their depths, and magnitudes. 
