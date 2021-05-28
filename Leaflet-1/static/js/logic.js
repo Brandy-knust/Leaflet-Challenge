@@ -48,13 +48,13 @@ function createFeatures(earthquakeData) {
 
   function pointToLayer (earthquake, coords) {
   return L.circleMarker(coords, {
-    fillOpacity: 0.75,
+    fillOpacity: 0.85,
     color: "white",
     fillColor: markerColor(earthquake.geometry.coordinates[2]),
     weight: 1,
-    opacity: 0.7,
+    opacity: 0.8,
     // Adjust radius
-    radius: (earthquake.properties.mag)*2
+    radius: (earthquake.properties.mag)*3
   })}
   function onEachFeature (earthquake, popUp) {
     popUp.bindPopup("<h3>" + earthquake.properties.place +
