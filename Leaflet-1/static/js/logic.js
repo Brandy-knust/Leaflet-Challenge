@@ -1,5 +1,5 @@
 // Store our API endpoint inside queryUrl
-var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_month.geojson";
+var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/1.0_month.geojson";
 
 // Perform a GET request to the query URL
 d3.json(queryUrl).then(function (data) {
@@ -43,7 +43,10 @@ function createFeatures(earthquakeData) {
     // console.log(`color: ${color}`)
   }
 
-function pointToLayer (earthquake, coords) {
+  
+  
+
+  function pointToLayer (earthquake, coords) {
   return L.circleMarker(coords, {
     fillOpacity: 0.75,
     color: "white",
@@ -51,7 +54,7 @@ function pointToLayer (earthquake, coords) {
     weight: 1,
     opacity: 0.7,
     // Adjust radius
-    radius: (earthquake.properties.mag) *3
+    radius: (earthquake.properties.mag)*2
   })}
   function onEachFeature (earthquake, popUp) {
     popUp.bindPopup("<h3>" + earthquake.properties.place +
@@ -111,12 +114,28 @@ function pointToLayer (earthquake, coords) {
       collapsed: false
     }).addTo(myMap);
 
-    var info = L.control({
-      position: "bottomright"
-    });
-    info.onAdd = function() {      
-      var div = L.DomUtil.create("div", "legend");
-      return div;
-    };
-    info.addTo(myMap);
+    // var info = L.control({
+    //   position: "bottomright"
+    // });
+    // info.onAdd = function() {      
+    //   var div = L.DomUtil.create("div", "legend");
+    //   return div;
+    // };
+    // info.addTo(myMap);
+    var legend = L.control({ position: "bottomright" });
+  legend.onAdd = function() {
+    var div = L.DomUtil.create("div", "legend");
+    div.innerHTML='Depth of Earthquake'+
+    '<i style="background:#d92b2b"><p>+90:</p></i></br>'+
+    '<i style="background:#f0873c"><p>70-90:</p></i></br>'+
+    '<i style="background:#ed7f3b"><p>50-70:</p></i></br>'+
+    '<i style="background:#edb63e"><p>30-50:</p></i></br>'+
+    '<i style="background:#beed3e"><p>10-30:</p></i></br>'+
+    '<i style="background:#8aed3e"><p><10:</p></i>'
+    // var depth = geojson.options.depth;
+    // var colors = geojson.options.color;
+    // var labels = [];
+    return div;
+  }
+    legend.addTo(myMap);
   }
